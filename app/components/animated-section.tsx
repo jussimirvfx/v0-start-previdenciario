@@ -166,24 +166,9 @@ export function StaggerItem({ children, className = "" }: { children: ReactNode;
   return (
     <motion.div
       className={`text-center border-black ${className}`}
-      variants={getStaggerItemVariants()}
       style={{ fontSize: "clamp(1.5rem, 6vw, 1.75rem)" }} // Aumenta ainda mais o tamanho da fonte em dispositivos móveis
     >
       {children}
     </motion.div>
   )
-}
-
-function getStaggerItemVariants() {
-  return {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut",
-      },
-    },
-  }
 }
