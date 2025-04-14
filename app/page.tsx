@@ -279,32 +279,16 @@ export default function Page() {
               <div className="max-w-4xl mx-auto mb-4 sm:mb-6 w-full px-2">
                 <AnimatedSection type="fade" duration={duration}>
                   <div className="relative aspect-video mb-3 sm:mb-4 border-2 sm:border-4 border-[#e1d5cb] rounded-lg overflow-hidden shadow-[0_0_15px_rgba(225,213,203,0.3)]">
-                    <Image
-                      src="/placeholder.svg?height=720&width=1280"
-                      alt="Vídeo introdutório"
-                      width={1280}
-                      height={720}
+                    <iframe 
+                      src="https://www.youtube.com/embed/RVc-AX65Q3A"
+                      title="Vídeo da Dra. Lucimara Deretti"
+                      width="1280"
+                      height="720"
                       className="w-full h-full object-cover"
-                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 90vw, (max-width: 1024px) 80vw, 1200px"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-                      <motion.div
-                        className="w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:w-16 lg:w-20 lg:h-20 rounded-full bg-gradient-to-r from-[#e1d5cb] to-[#4e2a27] flex items-center justify-center cursor-pointer shadow-[0_0_20px_rgba(0,0,0,0.5)]"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        initial={{ scale: 1 }}
-                        animate={{
-                          scale: [1, 1.05, 1],
-                          transition: {
-                            repeat: Number.POSITIVE_INFINITY,
-                            repeatType: "reverse",
-                            duration: 1.5,
-                          },
-                        }}
-                      >
-                        <div className="w-0 h-0 border-t-[5px] sm:border-t-[6px] md:border-t-[8px] border-t-transparent border-l-[10px] sm:border-l-[12px] md:border-l-[16px] border-l-black border-b-[5px] sm:border-b-[6px] md:border-b-[8px] border-b-transparent ml-1"></div>
-                      </motion.div>
-                    </div>
+                      frameBorder="0" 
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                      allowFullScreen
+                    ></iframe>
                   </div>
                 </AnimatedSection>
               </div>
@@ -496,7 +480,7 @@ export default function Page() {
                 <div className="bg-[#a67e62] border-2 border-black rounded-lg p-2 sm:p-3 md:p-4 h-full hover:shadow-[0_0_15px_rgba(225,213,203,0.3)] transition-shadow">
                   <div className="flex justify-center mb-2 sm:mb-3">
                     <AnimatedIcon
-                      icon={<BookOpen className="w-6 h-6 sm:w-7 sm:h-7 md:w-10 md:h-10 text-black" />}
+                      icon={<BookOpen className="w-6 h-6 sm:w-7 sm:h-7 md:w-10 md:w-10 text-black" />}
                       animation="bounce"
                     />
                   </div>
