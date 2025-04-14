@@ -25,12 +25,46 @@ import ModuleCarousel from "./components/module-carousel"
 import { useInView } from "framer-motion"
 import MobileAnimations from "./components/mobile-animations"
 import TouchAnimatedElement from "./components/animated-section-mobile"
+import Link from "next/link"
+import { useRouter, useSearchParams } from "next/navigation"
 
 export default function Page() {
   // Detect if user prefers reduced motion
   const prefersReducedMotion = useReducedMotion()
   const [isMobile, setIsMobile] = useState(false)
   const [isSmallMobile, setIsSmallMobile] = useState(false)
+  const searchParams = useSearchParams()
+  
+  // Função para gerar link com os parâmetros UTM
+  const getCtaLink = () => {
+    // URL base do destino
+    const baseURL = "https://mentoriastart.lucimaraderetti.com.br"
+    
+    // Coletando todos os parâmetros UTM da URL atual
+    const utmSource = searchParams.get('utm_source')
+    const utmMedium = searchParams.get('utm_medium')
+    const utmCampaign = searchParams.get('utm_campaign')
+    const utmContent = searchParams.get('utm_content')
+    const utmTerm = searchParams.get('utm_term')
+    
+    // Criando a URL com os parâmetros
+    let finalURL = baseURL
+    const params = new URLSearchParams()
+    
+    if (utmSource) params.append('utm_source', utmSource)
+    if (utmMedium) params.append('utm_medium', utmMedium)
+    if (utmCampaign) params.append('utm_campaign', utmCampaign)
+    if (utmContent) params.append('utm_content', utmContent)
+    if (utmTerm) params.append('utm_term', utmTerm)
+    
+    // Adicionando os parâmetros à URL se existirem
+    const paramString = params.toString()
+    if (paramString) {
+      finalURL += `?${paramString}`
+    }
+    
+    return finalURL
+  }
 
   // Check if device is mobile
   useEffect(() => {
@@ -181,12 +215,14 @@ export default function Page() {
                 <AnimatedSection type="fade" delay={delay + 0.2} duration={duration}>
                   <div className="flex flex-col sm:flex-row gap-4 mt-4 sm:mt-6 justify-center">
                     <motion.div whileTap={{ scale: 0.95 }} whileHover={{ scale: 1.05 }}>
-                      <Button
-                        size="lg"
-                        className="px-4 py-4 sm:px-6 sm:py-6 text-xs sm:text-sm min-h-[44px] min-w-[120px]"
-                      >
-                        GARANTIR MINHA VAGA
-                      </Button>
+                      <Link href={getCtaLink()}>
+                        <Button
+                          size="lg"
+                          className="px-4 py-4 sm:px-6 sm:py-6 text-xs sm:text-sm min-h-[44px] min-w-[120px]"
+                        >
+                          GARANTIR MINHA VAGA
+                        </Button>
+                      </Link>
                     </motion.div>
                   </div>
                 </AnimatedSection>
@@ -294,9 +330,11 @@ export default function Page() {
               </div>
 
               <div className="text-center">
-                <Button size="lg" className="px-4 py-3 sm:px-6 sm:py-4 md:px-8 md:py-5 text-xs sm:text-sm">
-                  Sim! Quero começar minha jornada no Direito Previdenciário!
-                </Button>
+                <Link href={getCtaLink()}>
+                  <Button size="lg" className="px-4 py-3 sm:px-6 sm:py-4 md:px-8 md:py-5 text-xs sm:text-sm">
+                    Sim! Quero começar minha jornada no Direito Previdenciário!
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
@@ -451,9 +489,11 @@ export default function Page() {
               </AnimatedSection>
 
               <div className="mt-6 text-center">
-                <Button size="lg" className="px-5 py-3 sm:px-6 sm:py-4 md:px-8 md:py-5 text-xs sm:text-sm">
-                  Quero começar agora!
-                </Button>
+                <Link href={getCtaLink()}>
+                  <Button size="lg" className="px-5 py-3 sm:px-6 sm:py-4 md:px-8 md:py-5 text-xs sm:text-sm">
+                    Quero começar agora!
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
@@ -646,9 +686,11 @@ export default function Page() {
               </p>
             </AnimatedSection>
             <AnimatedSection type="scale" delay={delay} duration={duration}>
-              <Button size="lg" className="px-4 py-3 sm:px-6 sm:py-4 md:px-8 md:py-5 text-[10px] sm:text-xs md:text-sm">
-                Quero acessar todos os benefícios agora!
-              </Button>
+              <Link href={getCtaLink()}>
+                <Button size="lg" className="px-4 py-3 sm:px-6 sm:py-4 md:px-8 md:py-5 text-[10px] sm:text-xs md:text-sm">
+                  Quero acessar todos os benefícios agora!
+                </Button>
+              </Link>
             </AnimatedSection>
           </div>
         </div>
