@@ -35,7 +35,7 @@ function CtaLinkProvider({ children }: { children: React.ReactNode }) {
   // Função para gerar link com os parâmetros UTM
   const getCtaLink = () => {
     // URL base do destino
-    const baseURL = "https://mentoriastart.lucimaraderetti.com.br"
+    const baseURL = "https://lucimara-deretti.vfx.marketing"
     
     // Coletando todos os parâmetros UTM da URL atual
     const utmSource = searchParams.get('utm_source')
@@ -80,7 +80,7 @@ function getCtaLink() {
     return window.getCtaLink()
   }
   // Fallback para URL base se não conseguirmos acessar os parâmetros
-  return "https://mentoriastart.lucimaraderetti.com.br"
+  return "https://lucimara-deretti.vfx.marketing"
 }
 
 export default function Page() {
