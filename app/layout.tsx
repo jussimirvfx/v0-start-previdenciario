@@ -3,6 +3,7 @@ import "./globals.css"
 import type { Metadata } from "next"
 import { Montserrat } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
+import { Bubble } from "@typebot.io/nextjs"
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -26,6 +27,11 @@ export default function RootLayout({
       <body className={`${montserrat.variable} font-sans bg-black`}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
           {children}
+          <Bubble
+            typebot="my-typebot-xnuyo0o"
+            apiHost="https://lucimara-deretti.vfx.marketing"
+            theme={{ button: { backgroundColor: "#A67E62" } }}
+          />
         </ThemeProvider>
       </body>
     </html>
