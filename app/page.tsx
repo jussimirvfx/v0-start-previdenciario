@@ -20,7 +20,7 @@ import ParticleBackground from "./components/particle-background"
 import ScrollProgress from "./components/scroll-progress"
 import Image from "next/image"
 import { motion, useReducedMotion } from "framer-motion"
-import { useEffect, useState, useRef, Suspense } from "react"
+import { useEffect, useState, useRef, Suspense, createContext, useContext } from "react"
 import ModuleCarousel from "./components/module-carousel"
 import { useInView } from "framer-motion"
 import MobileAnimations from "./components/mobile-animations"
@@ -28,76 +28,72 @@ import TouchAnimatedElement from "./components/animated-section-mobile"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 
+// Criando um contexto para compartilhar o link CTA gerado
+const CtaLinkContext = createContext<string>("https://lucimara-deretti.vfx.marketing")
+
+// Hook personalizado para acessar o link CTA gerado
+function useCtaLink() {
+  return useContext(CtaLinkContext)
+}
+
 // Componente para lidar com os parâmetros UTM
 function CtaLinkProvider({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams()
+  const [ctaLink, setCtaLink] = useState("https://lucimara-deretti.vfx.marketing")
   
-  // Função para gerar link com os parâmetros UTM
-  const getCtaLink = () => {
+  // Efeito para atualizar o link CTA sempre que os parâmetros da URL mudarem
+  useEffect(() => {
     // URL base do destino
     const baseURL = "https://lucimara-deretti.vfx.marketing"
     
-    // Coletando todos os parâmetros UTM da URL atual
-    // Capturando TODOS os parâmetros da URL, não apenas UTMs específicos
+    // Coletando todos os parâmetros da URL atual
     const allParams = new URLSearchParams()
     
     // Iterando sobre todos os parâmetros na URL atual e os copiando
     if (searchParams) {
-      // Método mais seguro de obter todos os parâmetros
       const entries = Array.from(searchParams.entries())
       
-      // Verificando se há parâmetros realmente presentes (debug)
       if (entries.length > 0) {
         console.log('Parâmetros encontrados na URL:', entries)
+        
+        // Adicionando todos os parâmetros encontrados
+        for (const [key, value] of entries) {
+          allParams.append(key, value)
+        }
+        
+        // Criando a URL com os parâmetros
+        const paramString = allParams.toString()
+        const finalURL = paramString ? `${baseURL}?${paramString}` : baseURL
+        
+        console.log('URL final gerada:', finalURL)
+        
+        // Atualizando o estado com a URL completa
+        setCtaLink(finalURL)
       } else {
         console.log('Nenhum parâmetro encontrado na URL')
-      }
-      
-      // Adicionando todos os parâmetros encontrados
-      for (const [key, value] of entries) {
-        allParams.append(key, value)
+        setCtaLink(baseURL)
       }
     }
-    
-    // Criando a URL com os parâmetros
-    let finalURL = baseURL
-    const paramString = allParams.toString()
-    
-    if (paramString) {
-      finalURL += `?${paramString}`
-      console.log('URL final com parâmetros:', finalURL)
-    } else {
-      console.log('URL sem parâmetros:', finalURL)
-    }
-    
-    return finalURL
-  }
-
-  // Exportando a função como uma propriedade global do window para que seja acessível
-  useEffect(() => {
-    // @ts-ignore - Adicionando a função ao objeto window
-    window.getCtaLink = getCtaLink
-    
-    // Log para verificar se a função foi definida corretamente
-    console.log('Função getCtaLink definida no window object')
-    
-    // Teste para verificar a URL que seria gerada
-    const testUrl = getCtaLink()
-    console.log('Teste de URL gerada:', testUrl)
-  }, [searchParams])
-
-  return children
+  }, [searchParams]) // Re-executar sempre que os parâmetros de URL mudarem
+  
+  return (
+    <CtaLinkContext.Provider value={ctaLink}>
+      {children}
+    </CtaLinkContext.Provider>
+  )
 }
 
-// Função para gerar o link CTA que pode ser usada fora de componentes
-function getCtaLink() {
-  // Verifica se estamos no navegador e se a função global está disponível
-  if (typeof window !== 'undefined' && window.getCtaLink) {
-    // @ts-ignore - Acessando a função no objeto window
-    return window.getCtaLink()
-  }
-  // Fallback para URL base se não conseguirmos acessar os parâmetros
-  return "https://lucimara-deretti.vfx.marketing"
+// Componente de botão CTA que usa o contexto
+function CtaButton({ children, className = "" }: { children: React.ReactNode, className?: string }) {
+  const ctaLink = useCtaLink()
+  
+  return (
+    <Link href={ctaLink}>
+      <Button size="lg" className={className}>
+        {children}
+      </Button>
+    </Link>
+  )
 }
 
 export default function Page() {
@@ -257,14 +253,9 @@ export default function Page() {
                     <AnimatedSection type="fade" delay={delay + 0.2} duration={duration}>
                       <div className="flex flex-col sm:flex-row gap-4 mt-4 sm:mt-6 justify-center">
                         <motion.div whileTap={{ scale: 0.95 }} whileHover={{ scale: 1.05 }}>
-                          <Link href={getCtaLink()}>
-                            <Button
-                              size="lg"
-                              className="px-4 py-4 sm:px-6 sm:py-6 text-xs sm:text-sm min-h-[44px] min-w-[120px]"
-                            >
-                              GARANTIR MINHA VAGA
-                            </Button>
-                          </Link>
+                          <CtaButton className="px-4 py-4 sm:px-6 sm:py-6 text-xs sm:text-sm min-h-[44px] min-w-[120px]">
+                            GARANTIR MINHA VAGA
+                          </CtaButton>
                         </motion.div>
                       </div>
                     </AnimatedSection>
@@ -372,11 +363,9 @@ export default function Page() {
                   </div>
 
                   <div className="text-center">
-                    <Link href={getCtaLink()}>
-                      <Button size="lg" className="px-4 py-3 sm:px-6 sm:py-4 md:px-8 md:py-5 text-xs sm:text-sm">
-                        Sim! Quero começar minha jornada no Direito Previdenciário!
-                      </Button>
-                    </Link>
+                    <CtaButton className="px-4 py-3 sm:px-6 sm:py-4 md:px-8 md:py-5 text-xs sm:text-sm">
+                      Sim! Quero começar minha jornada no Direito Previdenciário!
+                    </CtaButton>
                   </div>
                 </div>
               </div>
@@ -531,11 +520,9 @@ export default function Page() {
                   </AnimatedSection>
 
                   <div className="mt-6 text-center">
-                    <Link href={getCtaLink()}>
-                      <Button size="lg" className="px-5 py-3 sm:px-6 sm:py-4 md:px-8 md:py-5 text-xs sm:text-sm">
-                        Quero começar agora!
-                      </Button>
-                    </Link>
+                    <CtaButton className="px-5 py-3 sm:px-6 sm:py-4 md:px-8 md:py-5 text-xs sm:text-sm">
+                      Quero começar agora!
+                    </CtaButton>
                   </div>
                 </div>
               </div>
@@ -728,11 +715,9 @@ export default function Page() {
                   </p>
                 </AnimatedSection>
                 <AnimatedSection type="scale" delay={delay} duration={duration}>
-                  <Link href={getCtaLink()}>
-                    <Button size="lg" className="px-4 py-3 sm:px-6 sm:py-4 md:px-8 md:py-5 text-[10px] sm:text-xs md:text-sm">
-                      Quero acessar todos os benefícios agora!
-                    </Button>
-                  </Link>
+                  <CtaButton className="px-4 py-3 sm:px-6 sm:py-4 md:px-8 md:py-5 text-[10px] sm:text-xs md:text-sm">
+                    Quero acessar todos os benefícios agora!
+                  </CtaButton>
                 </AnimatedSection>
               </div>
             </div>
