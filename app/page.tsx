@@ -38,35 +38,52 @@ function CtaLinkProvider({ children }: { children: React.ReactNode }) {
     const baseURL = "https://lucimara-deretti.vfx.marketing"
     
     // Coletando todos os parâmetros UTM da URL atual
-    const utmSource = searchParams.get('utm_source')
-    const utmMedium = searchParams.get('utm_medium')
-    const utmCampaign = searchParams.get('utm_campaign')
-    const utmContent = searchParams.get('utm_content')
-    const utmTerm = searchParams.get('utm_term')
+    // Capturando TODOS os parâmetros da URL, não apenas UTMs específicos
+    const allParams = new URLSearchParams()
+    
+    // Iterando sobre todos os parâmetros na URL atual e os copiando
+    if (searchParams) {
+      // Método mais seguro de obter todos os parâmetros
+      const entries = Array.from(searchParams.entries())
+      
+      // Verificando se há parâmetros realmente presentes (debug)
+      if (entries.length > 0) {
+        console.log('Parâmetros encontrados na URL:', entries)
+      } else {
+        console.log('Nenhum parâmetro encontrado na URL')
+      }
+      
+      // Adicionando todos os parâmetros encontrados
+      for (const [key, value] of entries) {
+        allParams.append(key, value)
+      }
+    }
     
     // Criando a URL com os parâmetros
     let finalURL = baseURL
-    const params = new URLSearchParams()
+    const paramString = allParams.toString()
     
-    if (utmSource) params.append('utm_source', utmSource)
-    if (utmMedium) params.append('utm_medium', utmMedium)
-    if (utmCampaign) params.append('utm_campaign', utmCampaign)
-    if (utmContent) params.append('utm_content', utmContent)
-    if (utmTerm) params.append('utm_term', utmTerm)
-    
-    // Adicionando os parâmetros à URL se existirem
-    const paramString = params.toString()
     if (paramString) {
       finalURL += `?${paramString}`
+      console.log('URL final com parâmetros:', finalURL)
+    } else {
+      console.log('URL sem parâmetros:', finalURL)
     }
     
     return finalURL
   }
 
-  // Exportando a função como uma propriedade global do window para que ela seja acessível
+  // Exportando a função como uma propriedade global do window para que seja acessível
   useEffect(() => {
     // @ts-ignore - Adicionando a função ao objeto window
     window.getCtaLink = getCtaLink
+    
+    // Log para verificar se a função foi definida corretamente
+    console.log('Função getCtaLink definida no window object')
+    
+    // Teste para verificar a URL que seria gerada
+    const testUrl = getCtaLink()
+    console.log('Teste de URL gerada:', testUrl)
   }, [searchParams])
 
   return children
