@@ -4,6 +4,7 @@ import type { Metadata } from "next"
 import { Montserrat } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Bubble } from "@typebot.io/nextjs"
+import { GoogleTagManager } from "@/components/GoogleTagManager"
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -25,6 +26,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className="scroll-smooth">
       <body className={`${montserrat.variable} font-sans bg-black`}>
+        <GoogleTagManager />
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
           {children}
           <Bubble

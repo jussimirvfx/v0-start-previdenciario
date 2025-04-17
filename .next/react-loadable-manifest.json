@@ -1,1 +1,8 @@
-{}
+{
+  "node_modules/.pnpm/@typebot.io+nextjs@0.3.80_@typebot.io+js@0.3.22_zod@3.24.2__next@15.2.4_react-dom@19.1._7b00836aae3b62187faeb96cb71f1b0e/node_modules/@typebot.io/nextjs/dist/index.js -> ./dist-6FHLRCJX.js": {
+    "id": "node_modules/.pnpm/@typebot.io+nextjs@0.3.80_@typebot.io+js@0.3.22_zod@3.24.2__next@15.2.4_react-dom@19.1._7b00836aae3b62187faeb96cb71f1b0e/node_modules/@typebot.io/nextjs/dist/index.js -> ./dist-6FHLRCJX.js",
+    "files": [
+      "static/chunks/_app-pages-browser_node_modules_pnpm_typebot_io_nextjs_0_3_80__typebot_io_js_0_3_22_zod_3_24_-c63b9e.js"
+    ]
+  }
+}
